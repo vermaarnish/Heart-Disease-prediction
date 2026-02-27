@@ -22,7 +22,7 @@ Final model achieved ~85% maximum accuracy across multiple validation splits.
 
 The system follows a structured ML workflow:
 
-Data Collection
+Data Collection  
 Integrated multiple heart disease datasets.
 Data Preprocessing
 Missing value imputation (median)
@@ -48,20 +48,33 @@ Binary accuracy
 Deployment
 
 🏥 Input Features Used
+
 Age
+
 Gender
+
 Chest Pain Type (cp)
-Resting Blood Pressur
+
+Resting Blood Pressure
+
 Cholesterol
+
 Fasting Blood Sugar
+
 Rest ECG
+
 Maximum Heart Rate Achieved
+
 Exercise Induced Angina
+
 Target Output:
+
 0 → No Heart Disease
+
 1–4 → Stage of Heart Disease
 
-📚 References
+📚 References :
+
 UCI Heart Disease Dataset
 
 Random Forest Algorithm (Breiman, 2001)
