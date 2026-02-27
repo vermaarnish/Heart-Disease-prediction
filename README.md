@@ -1,5 +1,7 @@
 # Heart-Disease-prediction
 ❤️ Heart Disease Prediction using Machine Learning  A supervised Machine Learning system designed to predict the presence and stage of heart disease using clinical parameters. This project integrates data preprocessing, feature engineering, model optimization, and web-based deployment using Flask.
+
+
 📌 Project Overview
 
 Heart disease is one of the leading causes of death globally. Early detection using non-invasive clinical features can significantly improve patient outcomes.
