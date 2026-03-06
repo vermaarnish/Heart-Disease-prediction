@@ -73,7 +73,7 @@ Target Output:
 
 1–4 → Stage of Heart Disease
 
-📚 # References :
+📚  References :
 
 UCI Heart Disease Dataset
 
