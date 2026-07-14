@@ -3,9 +3,9 @@ from flask import Flask, render_template, request
 import pickle
 import numpy as np
 
-# Load the Random Forest CLassifier model
-filename = 'random-forest-model.pkl'
-model = pickle.load(open(filename, 'rb'))
+# Load the Random Forest CLassifier model and scaler
+model = pickle.load(open('random-forest-model.pkl', 'rb'))
+scaler = pickle.load(open('scaler.pkl', 'rb'))
 
 app = Flask(__name__)
 
@@ -33,7 +33,8 @@ def predict():
         thal = request.form.get('thal')
         
         data = np.array([[age,sex,cp,trestbps,chol,fbs,restecg,thalach,exang,oldpeak,slope,ca,thal]])
-        my_prediction = model.predict(data)
+        data_scaled = scaler.transform(data)
+        my_prediction = model.predict(data_scaled)
         
         return render_template('result.html', prediction=my_prediction)
         

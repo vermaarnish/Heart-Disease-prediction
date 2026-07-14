@@ -2,6 +2,8 @@
 
 A machine learning web application that predicts the presence of heart disease from clinical parameters. The project covers the full pipeline — data preprocessing, model training/comparison, and deployment through a Flask web app — using the UCI Cleveland Heart Disease dataset.
 
+🚀 **Live Interactive Demo:** [https://vermaarnish.github.io/Heart-Disease-prediction/](https://vermaarnish.github.io/Heart-Disease-prediction/)
+
 **Live demo model accuracy:** ~88.75% (Random Forest)
 
 ---

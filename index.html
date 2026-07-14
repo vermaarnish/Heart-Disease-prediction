@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Disease Risk Predictor - Clinical ML Application</title>
+    <meta name="description" content="An interactive Machine Learning web application utilizing a Random Forest Classifier to assess cardiovascular disease probability. Built with client-side inference.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <!-- Header -->
+        <header>
+            <div class="logo-container">
+                <div class="heart-icon-wrapper">
+                    <!-- Custom cardiology-themed heart SVG -->
+                    <svg class="heart-svg" viewBox="0 0 32 32">
+                        <path d="M16,28.261l-1.956-1.782C7.11,20.125,2,15.49,2,9.857C2,5.224,5.624,1.6,10.257,1.6 c2.618,0,5.13,1.218,6.743,3.143C18.613,2.818,21.125,1.6,23.743,1.6C28.376,1.6,32,5.224,32,9.857c0,5.633-5.11,10.268-12.044,16.634 L16,28.261z"/>
+                    </svg>
+                </div>
+                <h1>Heart Disease Predictor</h1>
+            </div>
+            <p class="tagline">An interactive, high-fidelity Machine Learning model running entirely in your browser. Complete the form below to assess cardiovascular risk probability.</p>
+            <div class="accuracy-badge">Clinical Model Accuracy: 88.75%</div>
+        </header>
+
+        <!-- Main Form Card -->
+        <main>
+            <form id="predictor-form">
+                
+                <!-- Section 1: Demographics -->
+                <div class="card">
+                    <h2 class="form-section-title">
+                        <svg class="header-icon-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-red); filter: drop-shadow(0 0 4px var(--accent-red-glow));">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg> Patient Demographics
+                    </h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="age">Age</label>
+                            <input type="number" id="age" name="age" min="1" max="120" placeholder="e.g. 54" required>
+                            <span class="input-desc">Patient age in years.</span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="sex">Sex</label>
+                            <select id="sex" name="sex" required>
+                                <option value="" disabled selected>-- Select Option --</option>
+                                <option value="1">Male</option>
+                                <option value="0">Female</option>
+                            </select>
+                            <span class="input-desc">Biological sex of the patient.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: Vitals & Physiology -->
+                <div class="card">
+                    <h2 class="form-section-title">
+                        <svg class="header-icon-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-red); filter: drop-shadow(0 0 4px var(--accent-red-glow));">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                        </svg> Vitals & Physical Exams
+                    </h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="trestbps">Resting Blood Pressure (mmHg)</label>
+                            <input type="number" id="trestbps" name="trestbps" min="50" max="250" placeholder="e.g. 130" required>
+                            <span class="input-desc">BP at admission (Normal range: 94-200 mmHg).</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="thalach">Max Heart Rate Achieved (bpm)</label>
+                            <input type="number" id="thalach" name="thalach" min="50" max="250" placeholder="e.g. 150" required>
+                            <span class="input-desc">Maximum heart rate recorded (Range: 71-202 bpm).</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="fbs">Fasting Blood Sugar > 120 mg/dl</label>
+                            <select id="fbs" name="fbs" required>
+                                <option value="" disabled selected>-- Select Option --</option>
+                                <option value="1">Yes (Elevated / Diabetic)</option>
+                                <option value="0">No (Normal)</option>
+                            </select>
+                            <span class="input-desc">Indicates if fasting blood sugar exceeds 120 mg/dl.</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exang">Exercise Induced Angina</label>
+                            <select id="exang" name="exang" required>
+                                <option value="" disabled selected>-- Select Option --</option>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                            <span class="input-desc">Is chest pain triggered by exercise?</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 3: Lab Tests & Diagnostics -->
+                <div class="card">
+                    <h2 class="form-section-title">
+                        <svg class="header-icon-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-red); filter: drop-shadow(0 0 4px var(--accent-red-glow));">
+                            <path d="M6 3h12"></path>
+                            <path d="M12 3v12"></path>
+                            <path d="M10 15h4"></path>
+                            <path d="M19 21H5a2 2 0 0 1-2-2V15l5-7V5a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v3l5 7v4a2 2 0 0 1-2 2z"></path>
+                        </svg> Laboratory & Cardiac Metrics
+                    </h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="cp">Chest Pain Type (CP)</label>
+                            <select id="cp" name="cp" required>
+                                <option value="" disabled selected>-- Select Option --</option>
+                                <option value="0">Typical Angina</option>
+                                <option value="1">Atypical Angina</option>
+                                <option value="2">Non-anginal Pain</option>
+                                <option value="3">Asymptomatic</option>
+                            </select>
+                            <span class="input-desc">Category of chest pain reported by patient.</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="chol">Serum Cholesterol (mg/dl)</label>
+                            <input type="number" id="chol" name="chol" min="80" max="600" placeholder="e.g. 240" required>
+                            <span class="input-desc">Total blood cholesterol level (Range: 126-564 mg/dl).</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="restecg">Resting ECG Results</label>
+                            <select id="restecg" name="restecg" required>
+                                <option value="" disabled selected>-- Select Option --</option>
+                                <option value="0">Normal</option>
+                                <option value="1">ST-T Wave Abnormality</option>
+                                <option value="2">Left Ventricular Hypertrophy</option>
+                            </select>
+                            <span class="input-desc">Resting electrocardiogram results.</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="oldpeak">ST Depression (Oldpeak)</label>
+                            <input type="number" step="0.1" id="oldpeak" name="oldpeak" min="0" max="10" placeholder="e.g. 1.2" required>
+                            <span class="input-desc">ST depression induced by exercise relative to rest.</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="slope">Slope of Peak Exercise ST Segment</label>
+                            <select id="slope" name="slope" required>
+                                <option value="" disabled selected>-- Select Option --</option>
+                                <option value="0">Upsloping</option>
+                                <option value="1">Flat</option>
+                                <option value="2">Downsloping</option>
+                            </select>
+                            <span class="input-desc">The slope of the peak exercise ST segment.</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ca">Number of Major Vessels (0-4)</label>
+                            <input type="number" id="ca" name="ca" min="0" max="4" placeholder="e.g. 0" required>
+                            <span class="input-desc">Vessels colored by fluoroscopy.</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="thal">Thalassemia Type</label>
+                            <select id="thal" name="thal" required>
+                                <option value="" disabled selected>-- Select Option --</option>
+                                <option value="0">Normal</option>
+                                <option value="1">Fixed Defect</option>
+                                <option value="2">Reversible Defect</option>
+                            </select>
+                            <span class="input-desc">Blood disorder genetic indicator.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="btn-container">
+                    <button type="submit" class="btn" id="predict-btn">
+                        <svg class="btn-icon-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;">
+                            <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
+                            <line x1="8" y1="6" x2="16" y2="6"></line>
+                            <line x1="16" y1="14" x2="16" y2="18"></line>
+                            <line x1="8" y1="10" x2="8" y2="10.01"></line>
+                            <line x1="12" y1="10" x2="12" y2="10.01"></line>
+                            <line x1="16" y1="10" x2="16" y2="10.01"></line>
+                            <line x1="8" y1="14" x2="8" y2="14.01"></line>
+                            <line x1="12" y1="14" x2="12" y2="14.01"></line>
+                            <line x1="8" y1="18" x2="8" y2="18.01"></line>
+                            <line x1="12" y1="18" x2="12" y2="18.01"></line>
+                        </svg> Calculate Risk Probability
+                    </button>
+                </div>
+            </form>
+
+            <!-- Results Card (Hidden Initially) -->
+            <div class="card results-card" id="results-card">
+                <div class="results-header">
+                    <h2 class="results-title">Analysis Outcomes</h2>
+                </div>
+
+                <!-- Radial Gauge Progress Ring -->
+                <div class="gauge-container">
+                    <svg class="gauge-svg" width="160" height="160">
+                        <circle class="gauge-bg" cx="80" cy="80" r="70" />
+                        <circle class="gauge-fill" id="gauge-fill" cx="80" cy="80" r="70" />
+                    </svg>
+                    <div class="gauge-text">
+                        <div class="gauge-value" id="result-value">0%</div>
+                        <div class="gauge-label">Chance</div>
+                    </div>
+                </div>
+
+                <!-- Diagnostics Box -->
+                <div class="diagnostic-box" id="diagnostic-box">
+                    <h3>Risk Level</h3>
+                    <p>Model classification description will appear here.</p>
+                </div>
+
+                <!-- Clinical Findings -->
+                <div class="findings-container">
+                    <h3 class="findings-title">Key Clinical Indicators & Findings:</h3>
+                    <ul class="findings-list" id="findings-list">
+                        <!-- Filled dynamically -->
+                    </ul>
+                </div>
+
+                <div class="results-actions">
+                    <button class="action-btn secondary-btn" id="print-btn">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px; vertical-align: middle;">
+                            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                            <rect x="6" y="14" width="12" height="8"></rect>
+                        </svg>Export Diagnostic Report
+                    </button>
+                    <button class="action-btn primary-btn" id="reset-btn">Reset & Evaluate New Patient</button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer>
+            <div class="social-links">
+                <a href="https://github.com/vermaarnish" target="_blank" class="social-link" title="Arnish Verma GitHub">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                        <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+                    </svg>
+                </a>
+                <a href="https://www.linkedin.com/in/arnish-verma-045014206/" target="_blank" class="social-link" title="Arnish Verma LinkedIn">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
+                </a>
+            </div>
+            <div class="footer-credits">
+                <p>Designed and Built by <strong>Arnish Verma</strong>.</p>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="model_data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

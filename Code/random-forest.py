@@ -53,7 +53,8 @@ print('Accuracy: {}%\n'.format(round((accuracy_score(y_test, y_pred)*100),2)))
 cm = confusion_matrix(y_test, y_pred)
 print(cm)
 
-# Creating a pickle file for the classifier
+# Creating a pickle file for the classifier and scaler
 filename = 'random-forest-model.pkl'
 pickle.dump(model, open(filename, 'wb'))
+pickle.dump(scaler, open('scaler.pkl', 'wb'))
 
