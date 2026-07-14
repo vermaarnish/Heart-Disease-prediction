@@ -9,6 +9,38 @@ document.addEventListener('DOMContentLoaded', () => {
     const diagnosticBox = document.getElementById('diagnostic-box');
     const resetBtn = document.getElementById('reset-btn');
 
+    // Theme Toggle logic
+    const themeToggleBtn = document.getElementById('theme-toggle-btn');
+    const sunIcon = themeToggleBtn.querySelector('.sun-icon');
+    const moonIcon = themeToggleBtn.querySelector('.moon-icon');
+
+    // Initialize Theme
+    const savedTheme = localStorage.getItem('theme');
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    if (savedTheme === 'light' || (!savedTheme && !systemPrefersDark)) {
+        document.documentElement.classList.add('light-mode');
+        sunIcon.style.display = 'none';
+        moonIcon.style.display = 'block';
+    } else {
+        document.documentElement.classList.remove('light-mode');
+        sunIcon.style.display = 'block';
+        moonIcon.style.display = 'none';
+    }
+
+    themeToggleBtn.addEventListener('click', () => {
+        const isLightMode = document.documentElement.classList.toggle('light-mode');
+        if (isLightMode) {
+            localStorage.setItem('theme', 'light');
+            sunIcon.style.display = 'none';
+            moonIcon.style.display = 'block';
+        } else {
+            localStorage.setItem('theme', 'dark');
+            sunIcon.style.display = 'block';
+            moonIcon.style.display = 'none';
+        }
+    });
+
     // SVG Circumference calculation
     const radius = 70;
     const circumference = 2 * Math.PI * radius;
